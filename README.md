@@ -14,9 +14,7 @@ If you are looking for take-and-use code, these repositories will be helpful.
 - [ACME](https://github.com/deepmind/acme): Deep mind RL tools. 
 
 ## Deep Q-learning 
-[note](notebook/deepQLearning), [code](code/dqn.py)
-Some tips are taken from UC Barkley CS 285.  
-
+Some tips are taken from UC Barkley CS 285.  [note](notebook/deepQLearning.ipynb), [code](algorithms/dqn.py)
 
 ## DDPG
 Deep Q-learning with a neural argmaxer.

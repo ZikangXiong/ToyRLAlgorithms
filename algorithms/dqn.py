@@ -41,20 +41,24 @@ class DQN:
         th.manual_seed(seed)
         np.random.seed(seed)
 
+        self.obs1 = None
+        self.optimizer = th.optim.Adam(self.q_net.parameters(), lr=1e-3)
+
     def rollout(self, n_step, epsilon):
-        obs1 = self.env.reset()
+        if self.obs1 is None:
+            self.obs1 = self.env.reset()
         reward_sum = 0
 
         for _ in range(n_step):
             if np.random.random_sample(1) > epsilon:
-                action = self.predict(obs1)
+                action = self.predict(self.obs1)
             else:
                 action = self.env.action_space.sample()
 
             obs2, reward, done, info = self.env.step(action)
             reward_sum += reward
-            self.buffer.add(obs1, action, reward, done, obs2)
-            obs1 = obs2
+            self.buffer.add(self.obs1, action, reward, done, obs2)
+            self.obs1 = obs2
 
             if done:
                 obs1 = self.env.reset()
@@ -63,16 +67,20 @@ class DQN:
         print(f"rollout cumulative reward: {reward_sum}")
 
     def update(self, n_epoch, training_step, batch_size, lr, gamma, tau, grad_clip):
-        optimizer = th.optim.Adam(self.q_net.parameters(), lr=lr)
+
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] = lr
+
+        # polyak update target network after each epoch
+        for target_param, param in zip(self.target_net.parameters(), self.q_net.parameters()):
+            target_param.data.copy_(
+                target_param.data * (1.0 - tau) + param.data * tau
+            )
 
         for ep in range(n_epoch):
             s1_batch, a_batch, r_batch, d_batch, s2_batch = self.buffer.sample_batch(batch_size)
             np2tensor = lambda tensor_list: [th.from_numpy(t).to(self.device) for t in tensor_list]
-            try:
-                s1_batch, a_batch, r_batch, d_batch, s2_batch = np2tensor([s1_batch, a_batch, r_batch, d_batch, s2_batch])
-            except:
-                print("ugugu")
-                import pdb; pdb.set_trace()
+            s1_batch, a_batch, r_batch, d_batch, s2_batch = np2tensor([s1_batch, a_batch, r_batch, d_batch, s2_batch])
 
             # target q-value
             self.q_net.eval()
@@ -91,19 +99,18 @@ class DQN:
 
                 # loss function, Huber loss
                 loss = F.smooth_l1_loss(pred_q_value.float(), target_value.float())
-                optimizer.zero_grad()
+                self.optimizer.zero_grad()
                 loss.backward()
 
                 # grad clip
                 for param in self.q_net.parameters():
                     param.grad.data.clamp_(-grad_clip, grad_clip)
-                optimizer.step()
+                self.optimizer.step()
 
-        # soft update target network after each epoch
-        for target_param, param in zip(self.target_net.parameters(), self.q_net.parameters()):
-            target_param.data.copy_(
-                target_param.data * (1.0 - tau) + param.data * tau
-            )
+        print(f"loss: {loss.detach().cpu().numpy().item()}")
+        print(f"Target Q: {np.mean(target_value.detach().cpu().numpy())}")
+        print(f"Predicted Q: {np.mean(pred_q_value.detach().cpu().numpy())}")
+        print("---")
 
     def learn(self, time_step,
               n_step,
@@ -116,11 +123,11 @@ class DQN:
               grad_clip=1.0):
 
         for i in range(time_step // n_step):
-            # epsilon-greedy, decay each rollout, for 100 rollouts.
-            self.rollout(n_step, epsilon=max(1 - i * 0.01, 0))
+            # epsilon-greedy, decay each rollout, for 50 rollouts.
+            self.rollout(n_step, epsilon=max(0.5 - i * 0.01, 0))
             self.update(n_epoch, training_step, batch_size, lr, gamma, tau, grad_clip)
 
-    def predict(self, obs) -> np.ndarray:
+    def predict(self, obs: np.ndarray) -> np.ndarray:
         obs = th.from_numpy(obs).unsqueeze(0)
         self.q_net.eval()
         with th.no_grad():
@@ -132,7 +139,7 @@ class DQN:
     def save(self, file_path):
         save_dict = {
             "device": self.device,
-            # "buffer": self.buffer,
+            "pixel_input": True if type(self.q_net) is NatureCNN else False,
             "q_net_param": self.q_net.state_dict(),
             "target_net_param": self.q_net.state_dict()
         }
@@ -145,7 +152,8 @@ class DQN:
     @classmethod
     def load(cls, file_path, env=None):
         save_dict = th.load(file_path)
-        dqn = cls(env, device=save_dict["device"])
-        # dqn.buffer = save_dict["buffer"]
+        dqn = cls(env, pixel_input=save_dict["pixel_input"], device=save_dict["device"])
         dqn.q_net.load_state_dict(save_dict["q_net_param"])
         dqn.target_net.load_state_dict(save_dict["target_net_param"])
+
+        return dqn
