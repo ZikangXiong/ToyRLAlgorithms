@@ -16,7 +16,7 @@ HYPER_PARAM = {
             "n_step": 10000,
             "n_epoch": 3,
             "training_step": 10,
-            "batch_size": 1512,
+            "batch_size": 512,
             "lr": 1e-4,
             "gamma": 0.99,
             "tau": 0.1,

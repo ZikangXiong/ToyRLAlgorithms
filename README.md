@@ -1,4 +1,5 @@
 # Toy RL Algorithms
+![code-grade](https://www.code-inspector.com/project/19281/status/svg)  
 ![logo](assets/logo.png)  
 
 A collection of pytorch implementation of basic reinforcement learning algorithms. 
