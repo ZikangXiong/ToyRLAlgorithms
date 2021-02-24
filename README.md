@@ -29,6 +29,7 @@ Deep Q-learning with a neural argmaxer.
 ## TD3
 
 ## REINFROCE
+Vanilla policy gradient [note](notebook/REINFORCE.ipynb), [code](algorithms/reinforce.py)    
 
 ## PPO
 
