@@ -19,7 +19,13 @@ If you are looking for take-and-use code, these repositories will be helpful.
 
 ## Deep Q-learning
 
-Some tips are taken from UC Barkley CS 285.   
+Some tips are taken from UC Barkley CS 285. 
+1. Replay buffer reduces the strong correlation between samples [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/2803522f2cbcf5cb2386eedf5b354016365ee5ad/algorithms/dqn.py#L81)  
+2. Target network for solving the moving target [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/2803522f2cbcf5cb2386eedf5b354016365ee5ad/algorithms/dqn.py#L101)    
+3. Ployak update for target network [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/2803522f2cbcf5cb2386eedf5b354016365ee5ad/algorithms/dqn.py#L75)  
+4. double q-learning reduce the over-fitting on noise [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/2803522f2cbcf5cb2386eedf5b354016365ee5ad/algorithms/dqn.py#L91)    
+5. multi-step targets [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/2803522f2cbcf5cb2386eedf5b354016365ee5ad/algorithms/dqn.py#L90)    
+6. Bellman error gradients can be big, use gradient clip and Huber loss [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/2803522f2cbcf5cb2386eedf5b354016365ee5ad/algorithms/dqn.py#L101-L108)   
 [note](notebook/deepQLearning.ipynb), [code](algorithms/dqn.py)
 
 ## DDPG
