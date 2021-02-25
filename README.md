@@ -19,17 +19,19 @@ If you are looking for take-and-use code, these repositories will be helpful.
 
 ## Deep Q-learning
 
-Some tips are taken from UC Barkley CS 285.  [note](notebook/deepQLearning.ipynb), [code](algorithms/dqn.py)
+Some tips are taken from UC Barkley CS 285.   
+[note](notebook/deepQLearning.ipynb), [code](algorithms/dqn.py)
 
 ## DDPG
 
-Deep Q-learning with a neural argmaxer.
-[note](notebook/DDPG.ipynb)  
+Deep Q-learning with a neural argmaxer.  
+[note](notebook/DDPG.ipynb), [code](algorithms/ddpg.py)   
 
 ## TD3
 
 ## REINFROCE
-Vanilla policy gradient [note](notebook/REINFORCE.ipynb), [code](algorithms/reinforce.py)    
+Vanilla policy gradient.  
+[note](notebook/REINFORCE.ipynb), [code](algorithms/reinforce.py)    
 
 ## PPO
 

@@ -61,7 +61,7 @@ class DQN:
             self.obs1 = obs2
 
             if done:
-                obs1 = self.env.reset()
+                self.obs1 = self.env.reset()
 
         # simple check
         print(f"rollout cumulative reward: {reward_sum}")

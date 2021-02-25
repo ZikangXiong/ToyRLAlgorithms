@@ -53,12 +53,17 @@ class Reinforce:
             self.update(gamma)
 
     def predict(self, obs, deterministic=False) -> np.ndarray:
+        self.policy_network.eval()
         with th.no_grad():
             if deterministic:
-                return self.policy_network(obs).detach().cpu().numpy()
+                action = self.policy_network(obs).detach().cpu().numpy()
+                self.policy_network.train()
             else:
                 distr = MultivariateNormal(self.policy_network(obs), self.action_std)
-                return distr.sample().detach().cpu().numpy()
+                action = distr.sample().detach().cpu().numpy()
+                self.policy_network.train()
+
+        return action
 
     def policy_grad(self, gamma) -> th.Tensor:
         dis_rews = self.compute_discounted_rewards(gamma)
