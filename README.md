@@ -33,10 +33,11 @@ If you are looking for take-and-use code, these repositories will be helpful.
 Deep Q-learning with a neural argmaxer.  
 
 ## TD3  
+[code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/master/algorithms/td3.py)  
 A common failure mode for DDPG is that the learned Q-function begins to dramatically overestimate Q-values, which then leads to the policy breaking, because it exploits the errors in the Q-function.   
-1. Clipped Double-Q Learning, see Deep Q-learning.   
-2. Delayed Policy Updates, see Deep Q-learning.  
-3. Target Policy Smoothing. TD3 adds noise to the target action, to make it harder for the policy to exploit Q-function errors by smoothing out Q along changes in action.
+1. Clipped Double-Q Learning, see Deep Q-learning. - [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/e714eaa9ae518d0be302ca54dcfe340a4991c817/algorithms/td3.py#L35)     
+2. Delayed Policy Updates, see Deep Q-learning. - [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/e714eaa9ae518d0be302ca54dcfe340a4991c817/algorithms/td3.py#L91)  
+3. Target Policy Smoothing. TD3 adds noise to the target action, to make it harder for the policy to exploit Q-function errors by smoothing out Q along changes in action. - [code](https://github.com/ZikangXiong/ToyRLAlgorithms/blob/e714eaa9ae518d0be302ca54dcfe340a4991c817/algorithms/td3.py#L40)  
 
 ## REINFROCE
 [note](notebook/REINFORCE.ipynb), [code](algorithms/reinforce.py)    
