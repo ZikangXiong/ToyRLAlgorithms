@@ -57,32 +57,30 @@ class DDPG:
         for _ in range(n_epoch):
             for _ in range(n_step):
                 training_batch = self.replay_buffer.sample_batch(batch_size)
+                self.update_critic(training_batch, gamma, grad_clip_val)
+                self.update_actor(training_batch, grad_clip_val)
+                self.update_target(tau)
 
-                critic_loss = self.compute_critic_loss(training_batch, gamma)
-                self.critic_optim.zero_grad()
-                grad_clip(self.critic, grad_clip_val)
-                critic_loss.backward()
-                self.critic_optim.step()
+    def update_critic(self, training_batch, gamma, grad_clip_val):
+        critic_loss = self.compute_critic_loss(training_batch, gamma)
+        self.critic_optim.zero_grad()
+        grad_clip(self.critic, grad_clip_val)
+        critic_loss.backward()
+        self.critic_optim.step()
 
-                actor_loss = self.compute_actor_loss(training_batch)
-                self.actor_optim.zero_grad()
-                grad_clip(self.actor, grad_clip_val)
-                actor_loss.backward()
-                self.actor_optim.step()
+    def update_actor(self, training_batch, grad_clip_val):
+        actor_loss = self.compute_actor_loss(training_batch)
+        self.actor_optim.zero_grad()
+        grad_clip(self.actor, grad_clip_val)
+        actor_loss.backward()
+        self.actor_optim.step()
 
-                polyak_update(self.actor, self.actor_target, tau)
-                polyak_update(self.critic, self.critic_target, tau)
+    def update_target(self, tau):
+        polyak_update(self.actor, self.actor_target, tau)
+        polyak_update(self.critic, self.critic_target, tau)
 
     def compute_critic_loss(self, sample_batch, gamma):
-        # compute target Q
-        with th.no_grad():
-            s2 = th.from_numpy(sample_batch[4]).float().to(self.device)
-            action_pred = self.actor_target(s2)
-            target_critic_input = th.cat([s2, action_pred], dim=1)
-            q_pred = self.critic_target(target_critic_input)
-            reward = th.from_numpy(sample_batch[2]).float().to(self.device)
-            dones = sample_batch[3]
-            target_q = reward + (gamma * q_pred * (1 - dones))
+        target_q = self.compute_target_q(sample_batch, gamma)
 
         # compute Q
         s1 = th.from_numpy(sample_batch[0]).float().to(self.device)
@@ -94,6 +92,19 @@ class DDPG:
         loss = loss_fn(q, target_q)
 
         return loss
+
+    def compute_target_q(self, sample_batch, gamma):
+        # compute target Q
+        with th.no_grad():
+            s2 = th.from_numpy(sample_batch[4]).float().to(self.device)
+            action_pred = self.actor_target(s2)
+            target_critic_input = th.cat([s2, action_pred], dim=1)
+            q_pred = self.critic_target(target_critic_input)
+            reward = th.from_numpy(sample_batch[2]).float().to(self.device)
+            dones = sample_batch[3]
+            target_q = reward + (gamma * q_pred * (1 - dones))
+
+        return target_q
 
     def compute_actor_loss(self, sample_batch):
         s1 = th.from_numpy(sample_batch[0]).float().to(self.device)
@@ -112,7 +123,8 @@ class DDPG:
               n_step,
               gamma, tau,
               grad_clip_val,
-              noise_param):
+              noise_param,
+              **kwargs):
 
         # The original paper used Ornstein-uhlenbeck process
         self.noise = OrnsteinUhlenbeckActionNoise(**noise_param)
@@ -155,7 +167,7 @@ class DDPG:
         ddpg = cls(env, device=save_dict["device"], buffer_size=save_dict["buffer_size"])
         ddpg.actor.load_state_dict(save_dict["actor"])
         ddpg.actor_target.load_state_dict(save_dict["actor_target"])
-        ddpg.actor.load_state_dict(save_dict["critic"])
-        ddpg.actor_target.load_state_dict(save_dict["critic_target"])
+        ddpg.critic.load_state_dict(save_dict["critic"])
+        ddpg.critic_target.load_state_dict(save_dict["critic_target"])
 
         return ddpg

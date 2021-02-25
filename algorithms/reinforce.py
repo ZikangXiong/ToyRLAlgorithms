@@ -69,7 +69,7 @@ class Reinforce:
         dis_rews = self.compute_discounted_rewards(gamma)
         log_probs = self.compute_log_probs()
 
-        return dis_rews.dot(log_probs)
+        return dis_rews.dot(-log_probs)
 
     def compute_discounted_rewards(self, gamma):
         buffer = np.array(self.buffer)
