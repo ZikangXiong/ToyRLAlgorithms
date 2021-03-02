@@ -32,6 +32,7 @@ def delta(rewards, gamma, values, t, l):
 
     for i in range(l):
         _delta += gamma ** i * rewards[t + i]
-    _delta += gamma ** l * rewards[t + l]
+    _delta += gamma ** l * values[t + l]
+    _delta -= values[t]
 
     return _delta
