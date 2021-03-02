@@ -65,7 +65,7 @@ curvature (K-FAC) with trust region
 ## PPO
 [paper](https://arxiv.org/pdf/1707.06347.pdf), [code]()  
 Simple clip mimic the trust region policy optimization.   
-Applied [GAE](https://arxiv.org/pdf/1506.02438.pdf).   
+Applied [GAE](https://arxiv.org/pdf/1506.02438.pdf) - [code](algorithms/utils/gae.py).   
 
 ## A3C  
 [paper](https://arxiv.org/abs/1602.01783)  
