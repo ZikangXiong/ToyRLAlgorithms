@@ -3,9 +3,7 @@
 ![code-grade](https://www.code-inspector.com/project/19281/status/svg)  
 ![logo](assets/logo.png)
 
-A collection of pytorch implementation of basic reinforcement learning algorithms. This repository aims to provide
-readable code and help understand the details and small ticks used in reinforcement learning algorithms. The
-implementation is not suitable for any production environment or large scale experiments.
+A collection of pytorch implementation of basic reinforcement learning algorithms. This repository aims to provide readable code and help understand the details and small tricks used in reinforcement learning algorithms. The implementation is not suitable for any production environment or large scale experiments.
 
 If you are looking for take-and-use code, these repositories will be helpful.
 
@@ -55,8 +53,8 @@ What’s different to TD3?
 ## REINFROCE
 [note](notebook/REINFORCE.ipynb), [code](algorithms/reinforce.py)    
 Vanilla policy gradient.  
-1. In practice, the computation of log probability can be inefficient. Notice that the log probability is an indicator of likelyhood. Thus, we can replace it with MSE o cross entropy loss. See [here](http://rail.eecs.berkeley.edu/deeprlcourse/static/slides/lec-5.pdf) for more details.     
-2. The sum of reward term can have high variance, use baseline can help. Minus a constant from reward collected is unbiased in expectation, but it can reduce the variance. See [here](http://rail.eecs.berkeley.edu/deeprlcourse/static/slides/lec-5.pdf) for more details.  
+1. In practice, the computation of log probability can be inefficient. Notice that the log probability is an indicator of likelihood. Thus, we can replace it with MSE or cross entropy loss. See [here](http://rail.eecs.berkeley.edu/deeprlcourse/static/slides/lec-5.pdf) for more details.     
+2. The sum of reward terms can have high variance, using a baseline can help. Minus a constant from reward collected is unbiased in expectation, but it can reduce the variance. See [here](http://rail.eecs.berkeley.edu/deeprlcourse/static/slides/lec-5.pdf) for more details.  
 3. The on-policy algorithm is not sample-efficient, importance sampling can help. See [here](http://rail.eecs.berkeley.edu/deeprlcourse/static/slides/lec-5.pdf) for more details.  
 
 ## TRPO
@@ -83,3 +81,4 @@ Online actor-critic with asynchronous gradient descent for optimization.
 1. One can apply different exploration strategies to asynchronous environments, the authors claimed that will enhance the robustness.  
 
 **\*: TODO**
+
