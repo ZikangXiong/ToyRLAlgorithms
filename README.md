@@ -1,4 +1,4 @@
-# Toy RL Algorithms
+# Toy RL Algorithms [Under Development, Not useable]
 
 ![code-grade](https://www.code-inspector.com/project/19281/status/svg)  
 ![logo](assets/logo.png)
@@ -13,7 +13,7 @@ If you are looking for take-and-use code, these repositories will be helpful.
 - [stable-baselines zoo](https://github.com/araffin/rl-baselines-zoo): A collection of pretrained RL agents
 - [stable-baselines3](https://github.com/DLR-RM/stable-baselines3): PyTorch implementation of stable-baselines
 - [ray/rllib](https://github.com/ray-project/ray): Large scale training and turning.
-- [ACME](https://github.com/deepmind/acme): Deep mind RL tools.
+- [ACME](https://github.com/deepmind/acme): Deep mind RL tools.  
 
 ## Deep Q-learning
 [note](notebook/deepQLearning.ipynb), [code](algorithms/dqn.py)  
