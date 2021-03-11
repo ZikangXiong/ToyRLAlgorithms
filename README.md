@@ -1,4 +1,4 @@
-# Toy RL Algorithms [Under Development]
+# Toy RL Algorithms [Under Development👷🛠]
 
 ![code-grade](https://www.code-inspector.com/project/19281/status/svg)  
 ![logo](assets/logo.png)
